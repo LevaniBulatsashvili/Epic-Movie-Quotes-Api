@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreForgotPasswordRequest;
-use App\Http\Requests\StoreLoginRequest;
-use App\Http\Requests\StoreRegisterRequest;
-use App\Http\Requests\StoreResetPasswordRequest;
+use App\Http\Requests\Auth\StoreForgotPasswordRequest;
+use App\Http\Requests\Auth\StoreLoginRequest;
+use App\Http\Requests\Auth\StoreRegisterRequest;
+use App\Http\Requests\Auth\StoreResetPasswordRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
@@ -51,13 +51,13 @@ class AuthController extends Controller
         }
 
         $payload = [
-            'exp' => Carbon::now()->addminutes(30)->timestamp,
+            'exp' => Carbon::now()->addminutes(300)->timestamp,
             'uid' => User::where($tryWith, '=', $request->username_email)->first()->id,
         ];
 
         $jwt = JWT::encode($payload, config('jwt.secret'), 'HS256');
 
-        $cookie = cookie("access_token", $jwt, 30, '/', env("FRONTEND_URL"), true, true, false, 'Strict');
+        $cookie = cookie("access_token", $jwt, 300, '/', env("FRONTEND_URL"), true, true, false, 'Strict');
 
         return response()->json('success', 200)->withCookie($cookie);
     }

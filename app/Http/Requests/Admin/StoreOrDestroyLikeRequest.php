@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLoginRequest extends FormRequest
+class StoreOrDestroyLikeRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,9 +14,7 @@ class StoreLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'username_email'     => 'required|min:3',
-            'password'           => 'required|min:3|max:15',
-            'remember_me',
+            'userId' => 'required',
         ];
     }
 }
