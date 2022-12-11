@@ -10,16 +10,17 @@ use Spatie\Translatable\HasTranslations;
 
 class Quote extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory;
+    use HasTranslations;
 
-	protected $guarded = ['id'];
+    protected $guarded = ['id'];
 
-	public $translatable = ['body'];
+    public $translatable = ['body'];
 
-	public function movie(): HasOne
-	{
-		return $this->hasOne(Movie::class);
-	}
+    public function movie(): HasOne
+    {
+        return $this->hasOne(Movie::class);
+    }
 
     public function quoteLike(): HasMany
     {

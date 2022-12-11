@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Admin\imageUploadRequest;
 use App\Http\Requests\Auth\StoreForgotPasswordRequest;
 use App\Http\Requests\Auth\StoreLoginRequest;
 use App\Http\Requests\Auth\StoreRegisterRequest;
@@ -25,6 +26,7 @@ class AuthController extends Controller
     {
         $attributes = $request->all();
         $attributes['password'] = bcrypt($attributes['password']);
+        $attributes['thumbnail'] = '';
 
         $user = User::create($attributes);
         event(new Registered($user));
@@ -67,6 +69,18 @@ class AuthController extends Controller
         auth()->logout();
 
         return response()->json(['message' => 'logout was successful'], 200)->withCookie("access_token", '', 10, '/', env("FRONTEND_URL"), true, true, false, 'Strict');
+    }
+
+    public function imageUpload(imageUploadRequest $request, User $user): JsonResponse
+    {
+        $user->update([
+            'thumbnail' => $request->file('thumbnail')->store('thumbnails'),
+        ]);
+
+        return response()->json([
+            'message' => 'success',
+            'thumbnail' => $user->thumbnail
+        ], 200);
     }
 
     public function refresh(): JsonResponse

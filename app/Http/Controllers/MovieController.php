@@ -10,26 +10,35 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    public function getMovies(): JsonResponse
-	{
-        $movies = Movie::all()->isEmpty() ? [] : Movie::all();
+    public function getMovies(Int $userId): JsonResponse
+    {
+        if (request()['search']) {
+            if (request()['lang'] === 'en') {
+                $movies = Movie::where('user_id', $userId)->whereRaw('LOWER(name->"$.en") like ?', '%'.strtolower(request()['search']).'%')->get();
+            } else {
+                $movies = Movie::where('user_id', $userId)->whereRaw('LOWER(name->"$.ka") like ?', '%'.strtolower(request()['search']).'%')->get();
+            }
+        } else {
+            $movies = Movie::where('user_id', $userId)->get();
+        }
 
-        foreach($movies as $key=>$movie) {
+
+        foreach ($movies as $key=>$movie) {
             $movies[$key]->quotes = count(Quote::where('movie_id', $movie->id)->get());
         }
 
-		return response()->json([
+        return response()->json([
             'message' => 'success',
             'movies' => $movies,
         ], 200);
-	}
+    }
 
     public function getMovie(Movie $movie): JsonResponse
-	{
-		return response()->json([
+    {
+        return response()->json([
             'message' => 'success',
             'movie' => $movie,
             'genres' => Genre::where('movie_id', $movie->id)->get(),
         ], 200);
-	}
+    }
 }

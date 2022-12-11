@@ -15,12 +15,12 @@ class UpdateMovieRequest extends FormRequest
     {
         return [
             'name_en'      => 'required|max:255',
-			'name_ka'      => 'required|max:255',
-			'director_en'     => 'required|max:255',
-			'director_ka'     => 'required|max:255',
+            'name_ka'      => 'required|max:255',
+            'director_en'     => 'required|max:255',
+            'director_ka'     => 'required|max:255',
             'description_en' => 'required|max:255',
             'description_ka' => 'required|max:255',
-			// 'image'    => 'image|mimes:jpeg,png,jpg',
+            'thumbnail'    => 'image|mimes:jpeg,png,jpg',
         ];
     }
 }

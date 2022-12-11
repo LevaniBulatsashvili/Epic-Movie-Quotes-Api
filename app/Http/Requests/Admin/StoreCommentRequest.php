@@ -16,7 +16,6 @@ class StoreCommentRequest extends FormRequest
         return [
             'username' => 'required|max:255',
             'body' => 'required|max:255',
-            // 'image'    => 'required|image|mimes:jpeg,png,jpg',
         ];
     }
 }
