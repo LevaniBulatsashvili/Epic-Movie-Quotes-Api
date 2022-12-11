@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             $idAndHash = explode("verify", $url)[1];
-            $vueUrl = "http://localhost:5173/verify-email" . $idAndHash;
+            $vueUrl = env('FULL_FRONTEND_URL').'verify-email' . $idAndHash;
             return (new MailMessage())
                 ->subject('Verify Email Address')
                 ->line('Click the button below to verify your email address.')
@@ -38,7 +38,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         ResetPassword::createUrlUsing(function ($user, string $token) {
-            return 'http://localhost:5173/new-password/'.$token;
+            return env('FULL_FRONTEND_URL').'new-password/'.$token;
         });
     }
 }
