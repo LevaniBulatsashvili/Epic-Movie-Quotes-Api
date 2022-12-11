@@ -15,38 +15,55 @@ use Illuminate\Http\JsonResponse;
 
 class QuoteController extends Controller
 {
-	public function store(StoreQuoteRequest $request, Movie $movie): JsonResponse
-	{
-		$quote = Quote::create([
-			'movie_id' => $movie->id,
-			'body'     => ['en' => $request->quote_en, 'ka' => $request->quote_ka],
-		]);
+    public function store(StoreQuoteRequest $request, Movie $movie): JsonResponse
+    {
+        $quote = Quote::create([
+            'movie_id' => $movie->id,
+            'username' => $request->username,
+            'body'     => ['en' => $request->quote_en, 'ka' => $request->quote_ka],
+            'thumbnail' => $request->file('thumbnail')->store('thumbnails'),
+            'user_thumbnail' => $request->user_thumbnail
+        ]);
 
         $quote->likes = 0;
         $quote->comments = [];
 
-		return response()->json([
+        return response()->json([
             'message' => 'quote successfully created',
             'quote' => $quote
         ], 200);
-	}
+    }
 
-	public function update(UpdateQuoteRequest $request, Quote $quote): JsonResponse
-	{
-		$quote->update(['body' => ['en' => $request->quote_en, 'ka' => $request->quote_ka]]);
-
-		return response()->json([
-            'message' => 'quote successfully created',
-            'quote' => $quote
-        ], 200);
-	}
-
-	public function destroy(Quote $quote): JsonResponse
+    public function update(UpdateQuoteRequest $request, Quote $quote): JsonResponse
     {
-		$quote->delete();
+        if (isset($request->thumbnail)) {
+            $quote->update([
+                'body' => ['en' => $request->quote_en, 'ka' => $request->quote_ka],
+                'thumbnail' => $request->file('thumbnail')->store('thumbnails'),
+                'user_thumbnail' => $request->user_thumbnail
+            ]);
+        } else {
+            $quote->update([
+                'body' => ['en' => $request->quote_en, 'ka' => $request->quote_ka],
+                'user_thumbnail' => $request->user_thumbnail
+            ]);
+        }
 
-		return response()->json(['message' => 'quote was successfully deleted'], 200);
-	}
+        $quote->comments = QuoteComment::where('quote_id', $quote->id)->get();
+        $quote->likes = count(QuoteLike::where('quote_id', $quote->id)->get());
+
+        return response()->json([
+            'message' => 'quote successfully created',
+            'quote' => $quote
+        ], 200);
+    }
+
+    public function destroy(Quote $quote): JsonResponse
+    {
+        $quote->delete();
+
+        return response()->json(['message' => 'quote was successfully deleted'], 200);
+    }
 
     public function createOrDestroyLike(StoreOrDestroyLikeRequest $request, Quote $quote): JsonResponse
     {
@@ -74,7 +91,7 @@ class QuoteController extends Controller
             'quote_id' => $quote->id,
             'username' => $request->username,
             'body' => $request->body,
-            // 'image' => $request->image,
+            'thumbnail' => $request->thumbnail,
         ]);
 
         return response()->json([

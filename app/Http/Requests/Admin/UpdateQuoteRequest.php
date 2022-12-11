@@ -14,9 +14,10 @@ class UpdateQuoteRequest extends FormRequest
     public function rules()
     {
         return [
+            'username' => 'required',
             'quote_en'     => 'required|max:255',
-			'quote_ka'     => 'required|max:255',
-            // 'image'    => 'required|image|mimes:jpeg,png,jpg',
+            'quote_ka'     => 'required|max:255',
+            'thumbnail'    => 'image|mimes:jpeg,png,jpg',
         ];
     }
 }
