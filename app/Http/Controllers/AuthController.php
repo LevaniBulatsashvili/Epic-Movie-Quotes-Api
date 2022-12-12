@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Firebase\JWT\JWT;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -52,16 +54,20 @@ class AuthController extends Controller
             ], 404);
         }
 
-        $payload = [
-            'exp' => Carbon::now()->addminutes(300)->timestamp,
-            'uid' => User::where($tryWith, '=', $request->username_email)->first()->id,
-        ];
+        if (User::where($tryWith, $request->username_email)->first()->hasVerifiedEmail()) {
+            $payload = [
+                'exp' => Carbon::now()->addminutes(300)->timestamp,
+                'uid' => User::where($tryWith, '=', $request->username_email)->first()->id,
+            ];
 
-        $jwt = JWT::encode($payload, config('jwt.secret'), 'HS256');
+            $jwt = JWT::encode($payload, config('jwt.secret'), 'HS256');
 
-        $cookie = cookie("access_token", $jwt, 300, '/', env("FRONTEND_URL"), true, true, false, 'Strict');
+            $cookie = cookie("access_token", $jwt, 300, '/', env("FRONTEND_URL"), true, true, false, 'Strict');
 
-        return response()->json('success', 200)->withCookie($cookie);
+            return response()->json('success', 200)->withCookie($cookie);
+        }
+
+        return response()->json(['message' => 'please verify email'], 200);
     }
 
     public function logout(): JsonResponse
@@ -116,7 +122,7 @@ class AuthController extends Controller
 
     public function showResetPassword($token): RedirectResponse
     {
-        return redirect('http://localhost:5173/new-password/'. $token);
+        return redirect(env('FULL_FRONTEND_URL').'new-password/'. $token);
     }
 
     public function resetPassword(StoreResetPasswordRequest $request): JsonResponse
@@ -136,13 +142,26 @@ class AuthController extends Controller
         return response()->json(['message' => 'password reset successful'], 200);
     }
 
-    public function verifyEmail(EmailVerificationRequest $request): Void
+    public function verifyEmail(Int $id, $hash): JsonResponse
     {
-        $request->fulfill();
+        $user = User::findOrFail($id);
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+            event(new Verified($user));
+        }
+        $payload = [
+            'exp' => Carbon::now()->addminutes(300)->timestamp,
+            'uid' => $user->id,
+        ];
+
+        $jwt = JWT::encode($payload, config('jwt.secret'), 'HS256');
+        $cookie = cookie('access_token', $jwt, 300, '/', env('FRONTEND_URL'), true, true, false, 'Strict');
+
+        return response()->json(['message' => 'email verification was successful'], 200)->withCookie($cookie);
     }
 
     public function showVerifyEmail(): RedirectResponse
     {
-        return redirect('http://localhost:5173/check-email');
+        return redirect(env('FULL_FRONTEND_URL').'check-email');
     }
 }
