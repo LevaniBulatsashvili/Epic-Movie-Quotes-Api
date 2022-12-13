@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserQuoteUpdated;
 use App\Models\Movie;
 use App\Models\Quote;
 use App\Models\QuoteComment;
@@ -78,6 +79,13 @@ class QuoteController extends Controller
             }
         }
         return $quotes;
+    }
+
+    public function quoteUpdated(Quote $quote)
+    {
+        UserQuoteUpdated::dispatch($quote);
+
+        return response()->json(['message' => 'hello'], 200);
     }
 
     protected function searchQuoteByName(Bool $en): Collection

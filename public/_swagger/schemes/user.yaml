@@ -1,0 +1,33 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        username:
+          type: string
+          example: John doe
+        email:
+          type: string
+          examle: example@gmail.com
+        password:
+          type: string
+          example: itsasecret
+        google_id:
+          type: integer
+        remember_token:
+          type: string
+        thumbnail:
+          type: string
+        email_verified_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"
+        created_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"
+        updated_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"

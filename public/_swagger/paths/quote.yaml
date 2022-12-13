@@ -1,0 +1,90 @@
+paths:
+  /quotes/recent:
+    get:
+      tags:
+        - Quote
+      summary: Gets all recent quotes
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Get quotes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  quotes:
+                    type: array
+                    items:
+                      $ref: "../schemes/quote.yaml#/components/schemas/Quote"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+  /quotes/{movieId}:
+    get:
+      tags:
+        - Quote
+      summary: Gets all quotes associated to a movie
+      security:
+        - bearerAuth: []
+      parameters:
+        movieId:
+          name: movieId
+          in: path
+          description: The Id of the resource
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+      responses:
+        "200":
+          description: Get quotes associated to a movie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  quotes:
+                    type: array
+                    items:
+                      $ref: "../schemes/quote.yaml#/components/schemas/Quote"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+  /quote/{id}:
+    get:
+      tags:
+        - Quote
+      summary: Gets single quote
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: Get quote by its id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  quote:
+                    type: object
+                    $ref: "../schemes/quote.yaml#/components/schemas/Quote"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"

@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  title: Epic Movie Quotes API
+  description: Here goes description
+  version: 0.1.9
+
+servers:
+  - url: http://localhost:8000/api
+    description: local server
+  - url: http://producation.app/api
+    description: production server
+
+paths:
+  /register:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1register"
+  /swagger-login:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1swagger-login"
+  /logout:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1logout"
+  /is-auth:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1is-auth"
+  /forgot-password:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1forgot-password"
+  /reset-password:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1reset-password"
+  /email/verify/{id}/{hash}:
+    $ref: "./_swagger/paths/auth.yaml#/paths/~1email~1verify~1{id}~1{hash}"
+  /user/{id}/movies:
+    $ref: "./_swagger/paths/movie.yaml#/paths/~1user~1{id}~1movies"
+  /movies/{id}:
+    $ref: "./_swagger/paths/movie.yaml#/paths/~1movies~1{id}"
+  /quotes/recent:
+    $ref: "./_swagger/paths/quote.yaml#/paths/~1quotes~1recent"
+  /quotes/{movieId}:
+    $ref: "./_swagger/paths/quote.yaml#/paths/~1quotes~1{movieId}"
+  /quote/{id}:
+    $ref: "./_swagger/paths/quote.yaml#/paths/~1quote~1{id}"
+  /admin/movies:
+    $ref: "./_swagger/paths/admin/movie.yaml#/paths/~1admin~1movies"
+  /admin/movies/{id}:
+    $ref: "./_swagger/paths/admin/movie.yaml#/paths/~1admin~1movies~1{id}"
+  /admin/movies/{id}/quotes:
+    $ref: "./_swagger/paths/admin/quote.yaml#/paths/~1admin~1movies~1{id}~1quotes"
+  /admin/quotes/{id}:
+    $ref: "./_swagger/paths/admin/quote.yaml#/paths/~1admin~1quotes~1{id}"
+  /admin/quotes/{id}/like:
+    $ref: "./_swagger/paths/admin/quote.yaml#/paths/~1admin~1quotes~1{id}~1like"
+  /admin/quotes/{id}/comment:
+    $ref: "./_swagger/paths/admin/quote.yaml#/paths/~1admin~1quotes~1{id}~1comment"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

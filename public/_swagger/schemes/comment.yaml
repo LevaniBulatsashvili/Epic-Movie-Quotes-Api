@@ -1,0 +1,27 @@
+components:
+  schemas:
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        quote_id:
+          type: integer
+          minimum: 1
+          example: 1
+        username:
+          type: string
+          example: John doe
+        body:
+          type: string
+          example: very nice quote
+        thumbnail:
+          type: string
+        created_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"
+        updated_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"

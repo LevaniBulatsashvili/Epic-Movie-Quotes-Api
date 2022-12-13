@@ -18,6 +18,7 @@ class StoreQuoteRequest extends FormRequest
             'quote_en'     => 'required|max:255',
             'quote_ka'     => 'required|max:255',
             'thumbnail'    => 'required|image|mimes:jpeg,png,jpg',
+            'user_thumbnail'
         ];
     }
 }

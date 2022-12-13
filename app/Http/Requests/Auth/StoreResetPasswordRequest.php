@@ -15,9 +15,9 @@ class StoreResetPasswordRequest extends FormRequest
     {
         return [
             'token'    => 'required',
-            'email'    => 'required|email',
-            'password' => 'required|min:3|max:255|confirmed',
-            'remember_me',
+            'email'    => 'required|max:255|email',
+            'password'              => 'required|min:8|max:15|confirmed',
+            'password_confirmation' => 'required|min:8|max:15',
         ];
     }
 }

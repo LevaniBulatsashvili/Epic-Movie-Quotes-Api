@@ -1,0 +1,179 @@
+paths:
+  /admin/movies:
+    post:
+      tags:
+        - Admin/Movie
+      summary: Creates a movie
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                name_en:
+                  type: string
+                  example: Batman
+                  maxLength: 255
+                name_ka:
+                  type: string
+                  example: ბატმანი
+                  maxLength: 255
+                director_en:
+                  type: string
+                  example: john doe
+                  maxLength: 255
+                director_ka:
+                  type: string
+                  example: ჯონ დოუჰ
+                  maxLength: 255
+                description_en:
+                  type: string
+                  example: very nice
+                  maxLength: 255
+                description_ka:
+                  type: string
+                  example: ვერი ნაის
+                  maxLength: 255
+                thumbnail:
+                  type: string
+                  format: binary
+                genres:
+                  type: array #
+                  items:
+                    $ref: "../../schemes/genre.yaml#/components/schemas/Genre"
+              required:
+                - user_id
+                - name_en
+                - name_ka
+                - director_en
+                - director_ka
+                - description_en
+                - description_ka
+                - thumbnail
+      responses:
+        "201":
+          description: Get movies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  movie:
+                    type: object
+                    $ref: "../../schemes/movie.yaml#/components/schemas/Movie"
+                  genres:
+                    type: array
+                    items:
+                      $ref: "../../schemes/genre.yaml#/components/schemas/Genre"
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "422":
+          $ref: "../../common.yaml#/components/responses/422"
+  /admin/movies/{id}:
+    post:
+      tags:
+        - Admin/Movie
+      summary: Updates a movie
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../../common.yaml#/components/parameters/id"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name_en:
+                  type: string
+                  example: Batman
+                  maxLength: 255
+                name_ka:
+                  type: string
+                  example: ბატმენი
+                  maxLength: 255
+                director_en:
+                  type: string
+                  example: john doe
+                  maxLength: 255
+                director_ka:
+                  type: string
+                  example: ჯონ დოუჰ
+                  maxLength: 255
+                description_en:
+                  type: string
+                  example: very nice
+                  maxLength: 255
+                description_ka:
+                  type: string
+                  example: ვერი ნაის
+                  maxLength: 255
+                thumbnail:
+                  type: string
+                  format: binary
+                genres:
+                  type: array
+                  items:
+                    $ref: "../../schemes/genre.yaml#/components/schemas/Genre"
+              required:
+                - name_en
+                - name_ka
+                - director_en
+                - director_ka
+                - description_en
+                - description_ka
+      responses:
+        "200":
+          description: Update movie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  movie:
+                    type: object
+                    $ref: "../../schemes/movie.yaml#/components/schemas/Movie"
+                  genres:
+                    type: array
+                    items:
+                      $ref: "../../schemes/genre.yaml#/components/schemas/Genre"
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../../common.yaml#/components/responses/404"
+    delete:
+      tags:
+        - Admin/Movie
+      summary: Deletes a movie
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: Delete movie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: movie was successfully deleted
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../../common.yaml#/components/responses/404"

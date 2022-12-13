@@ -1,0 +1,211 @@
+paths:
+  /admin/movies/{id}/quotes:
+    post:
+      tags:
+        - Admin/Quote
+      summary: Creates a quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: John doe
+                  maxLength: 255
+                quote_en:
+                  type: string
+                  example: I'm batman
+                  maxLength: 255
+                quote_ka:
+                  type: string
+                  example: მე ვარ ბატმენი
+                  maxLength: 255
+                thumbnail:
+                  type: string
+                  format: binary
+                user_thumbnail:
+                  type: string
+              required:
+                - username
+                - quote_en
+                - quote_ka
+                - thumbnail
+      responses:
+        "201":
+          description: Create quote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: quote successfully created
+                  quote:
+                    type: object
+                    $ref: "../../schemes/quote.yaml#/components/schemas/Quote"
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "422":
+          $ref: "../../common.yaml#/components/responses/422"
+  /admin/quotes/{id}:
+    post:
+      tags:
+        - Admin/Quote
+      summary: Updates a quote
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../../common.yaml#/components/parameters/id"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: John doe
+                  maxLength: 255
+                quote_en:
+                  type: string
+                  example: I'm batman
+                  maxLength: 255
+                quote_ka:
+                  type: string
+                  example: მე ვარ ბატმენი
+                  maxLength: 255
+                thumbnail:
+                  type: string
+                  format: binary
+                user_thumbnail:
+                  type: string
+              required:
+                - username
+                - quote_en
+                - quote_ka
+      responses:
+        "200":
+          description: Update movie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: quote successfully updated'
+                  quote:
+                    type: object
+                    $ref: "../../schemes/quote.yaml#/components/schemas/Quote"
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../../common.yaml#/components/responses/404"
+    delete:
+      tags:
+        - Admin/Quote
+      summary: Deletes a quote
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: Delete quote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: quote was successfully deleted'
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../../common.yaml#/components/responses/404"
+  /admin/quotes/{id}/like:
+    post:
+      tags:
+        - Admin/Quote
+      summary: Likes/Dislikes a quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+              required:
+                - userId
+      responses:
+        "200":
+          description: Like/Dislike quote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: quote was successfully liked
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "422":
+          $ref: "../../common.yaml#/components/responses/422"
+  /admin/quotes/{id}/comment:
+    post:
+      tags:
+        - Admin/Quote
+      summary: Comments on a quote
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: 1
+                  maxLength: 255
+                body:
+                  type: string
+                  example: 1
+                  maxLength: 255
+              required:
+                - username
+                - body
+      responses:
+        "201":
+          description: Get comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: comment was successfull
+                  quoteComment:
+                    type: object
+                    $ref: "../../schemes/comment.yaml#/components/schemas/Comment"
+
+        "401":
+          $ref: "../../common.yaml#/components/responses/401"
+        "422":
+          $ref: "../../common.yaml#/components/responses/422"
