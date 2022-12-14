@@ -19,7 +19,7 @@ class JwtAuth
                 $token = request()->cookie('access_token');
             }
 
-            if (request()->header('Authorization' > 7)) {
+            if (request()->header('Authorization') > 7) {
                 $token = substr(request()->header('Authorization'), 7);
             }
 

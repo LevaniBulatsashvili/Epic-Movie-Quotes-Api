@@ -11,7 +11,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,7 +19,6 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Firebase\JWT\JWT;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -87,11 +85,6 @@ class AuthController extends Controller
             'message' => 'success',
             'thumbnail' => $user->thumbnail
         ], 200);
-    }
-
-    public function refresh(): JsonResponse
-    {
-        return $this->respondWithToken(auth()->refresh());
     }
 
     protected function respondWithToken(string $token): JsonResponse

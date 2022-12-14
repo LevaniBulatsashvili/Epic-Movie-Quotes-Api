@@ -1,0 +1,61 @@
+paths:
+  /user/{id}/movies:
+    get:
+      tags:
+        - Movie
+      summary: Gets all user movies
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: Get movies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  movies:
+                    type: array
+                    items:
+                      $ref: "../schemes/movie.yaml#/components/schemas/Movie"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+  /movies/{id}:
+    get:
+      tags:
+        - Movie
+      summary: Gets single movie with associated genres
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: Get movie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: success
+                  movie:
+                    type: object
+                    $ref: "../schemes/movie.yaml#/components/schemas/Movie"
+                  genres:
+                    type: array
+                    items:
+                      type: string
+                      $ref: "../schemes/genre.yaml#/components/schemas/Genre"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"

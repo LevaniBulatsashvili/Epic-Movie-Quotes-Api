@@ -31,7 +31,7 @@ class QuoteController extends Controller
         return response()->json([
             'message' => 'quote successfully created',
             'quote' => $quote
-        ], 200);
+        ], 201);
     }
 
     public function update(UpdateQuoteRequest $request, Quote $quote): JsonResponse
@@ -53,7 +53,7 @@ class QuoteController extends Controller
         $quote->likes = count(QuoteLike::where('quote_id', $quote->id)->get());
 
         return response()->json([
-            'message' => 'quote successfully created',
+            'message' => 'quote successfully updated',
             'quote' => $quote
         ], 200);
     }
@@ -97,6 +97,6 @@ class QuoteController extends Controller
         return response()->json([
             'message' => 'comment was successfull',
             'quoteComment' => $quoteComment,
-        ], 200);
+        ], 201);
     }
 }

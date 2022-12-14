@@ -1,0 +1,233 @@
+paths:
+  /register:
+    post:
+      tags:
+        - User
+      summary: Registers user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Madara Uchiha
+                  minLength: 3
+                  maxLength: 15
+                email:
+                  type: string
+                  example: example@gmail.com
+                  maxLength: 255
+                password:
+                  type: string
+                  example: itsasecret
+                  minLength: 8
+                  maxLength: 15
+                password_confirmation:
+                  type: string
+                  example: itsasecret
+                  minLength: 8
+                  maxLength: 15
+              required:
+                - username
+                - email
+                - password
+                - password_confirmation
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: user created successfully
+        "422":
+          $ref: "../common.yaml#/components/responses/422"
+  /swagger-login:
+    post:
+      tags:
+        - User
+      summary: Registers user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username_email:
+                  type: string
+                  example: Madara Uchiha
+                  minLength: 3
+                  maxLength: 255
+                password:
+                  type: string
+                  example: itsasecret
+                  minLength: 8
+                  maxLength: 15
+                remember_me:
+                  type: string
+              required:
+                - username_email
+                - password
+      responses:
+        "200":
+          description: Login Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+        "422":
+          $ref: "../common.yaml#/components/responses/422"
+  /logout:
+    post:
+      tags:
+        - User
+      summary: Logout user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Logout Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: logout was successful
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+  /is-auth:
+    get:
+      tags:
+        - User
+      summary: Authenticates user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Authentication Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: authenticated successfully
+                  user:
+                    type: object
+                    $ref: "../schemes/user.yaml#/components/schemas/User"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+  /forgot-password:
+    post:
+      tags:
+        - User-Credentials
+      summary: Sends password reset link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                  maxLength: 255
+              required:
+                - email
+      responses:
+        "200":
+          description: Reset link sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: password reset link sent successfully
+        "422":
+          $ref: "../common.yaml#/components/responses/422"
+        "500":
+          $ref: "../common.yaml#/components/responses/500"
+  /reset-password:
+    post:
+      tags:
+        - User-Credentials
+      summary: Resets password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                  maxLength: 255
+                password:
+                  type: string
+                  example: itsasecret
+                  minLength: 8
+                  maxLength: 15
+                password_confirmation:
+                  type: string
+                  example: itsasecret
+                  minLength: 8
+                  maxLength: 15
+                token:
+                  type: string
+              required:
+                - email
+                - password
+                - password_confirmation
+                - token
+      responses:
+        "200":
+          description: Password reset success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: password reset successful
+        "422":
+          $ref: "../common.yaml#/components/responses/422"
+  /email/verify/{id}/{hash}:
+    get:
+      tags:
+        - User-Credentials
+      summary: Verify email
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: Verification success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: mail verification was successful
+        "404":
+          $ref: "../common.yaml#/components/responses/404"

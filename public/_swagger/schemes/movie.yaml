@@ -1,0 +1,48 @@
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        user_id:
+          type: integer
+          minimum: 1
+          example: 1
+        name:
+          type: object
+          properties:
+            en:
+              type: string
+              example: Batman
+            ka:
+              type: string
+              example: ბატმენი
+        director:
+          type: object
+          properties:
+            en:
+              type: string
+              example: John doe
+            ka:
+              type: string
+              example: ჯონ დოუჰ
+        description:
+          type: object
+          properties:
+            en:
+              type: string
+              example: very nice
+            ka:
+              type: string
+              example: ვერი ნაის
+        thumbnail:
+          type: string
+        created_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"
+        updated_at:
+          type: string
+          example: "2022-07-26T20:06:02.000000Z"

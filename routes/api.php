@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\MovieController as AdminMovieController;
 use App\Http\Controllers\Admin\QuoteController as AdminQuoteController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\QuoteController;
+use App\Events\UserQuoteUpdated;
+use App\Http\Controllers\SwaggerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +27,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login')->name('login');
     Route::post('/logout', 'logout')->middleware('jwt.auth')->name('logout');
     Route::post('/user/{user}/image-upload', 'imageUpload')->middleware('jwt.auth')->name('user_thumbnail');
-    Route::post('/refresh-token', 'refresh')->middleware('jwt.auth')->name('refresh');
     Route::get('/is-auth', 'isAuth')->middleware('jwt.auth')->name('is_auth');
 
     Route::post('/forgot-password', 'forgotPassword')->name('forgot_password');
@@ -34,7 +35,6 @@ Route::controller(AuthController::class)->group(function () {
 
     Route::get('/email/verify', 'showVerifyEmail')->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', 'verifyEmail')->name('verification.verify');
-    Route::post('/email/verification-notification', 'resendEmailVerification')->name('verification.send');
 });
 
 Route::controller(GoogleAuthController::class)->group(function () {
@@ -53,6 +53,10 @@ Route::controller(QuoteController::class)->middleware('jwt.auth')->group(functio
     Route::get('/quote/{quote}', 'getQuote')->name('one_quote');
 });
 
+Route::controller(QuoteController::class)->group(function () {
+    Route::get('/quotes/{quote}/quote-updated', 'quoteUpdated')->name('quote_updated');
+});
+
 Route::controller(AdminMovieController::class)->prefix('/admin')->middleware('jwt.auth')->group(function () {
     Route::post('/movies', 'store')->name('movies.store');
     Route::post('/movies/{movie}', 'update')->name('movies.update');
@@ -66,3 +70,5 @@ Route::controller(AdminQuoteController::class)->prefix('/admin')->middleware('jw
     Route::post('/quotes/{quote}/like', 'createOrDestroyLike')->name('quote_like');
     Route::post('/quotes/{quote}/comment', 'comment')->name('quote_comment');
 });
+
+Route::post('/swagger-login', [SwaggerController::class, 'login'])->name('swagger_login');
