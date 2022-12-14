@@ -14,7 +14,9 @@ use Illuminate\Queue\SerializesModels;
 
 class UserQuoteUpdated implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public $quote;
     public $like;
@@ -31,8 +33,11 @@ class UserQuoteUpdated implements ShouldBroadcast
         $this->quote = $quote;
 
         $this->channel_user = implode("-", explode(" ", $quote->username));
-        if ($action === 'comment')  $this->comment = QuoteComment::findOrFail($id)->only(['username', 'thumbnail']);
-        else if ($action === 'like') $this->like = User::findOrFail($id)->only(['username', 'thumbnail']);
+        if ($action === 'comment') {
+            $this->comment = QuoteComment::findOrFail($id)->only(['username', 'thumbnail']);
+        } elseif ($action === 'like') {
+            $this->like = User::findOrFail($id)->only(['username', 'thumbnail']);
+        }
     }
 
     /**

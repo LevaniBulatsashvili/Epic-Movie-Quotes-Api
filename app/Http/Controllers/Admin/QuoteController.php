@@ -85,7 +85,7 @@ class QuoteController extends Controller
             'quote_id' => $quote->id,
         ]);
 
-       $this->quoteUpdated(Quote::findOrFail($quote->id), 'like', $request->userId);
+        $this->quoteUpdated(Quote::findOrFail($quote->id), 'like', $request->userId);
         return response()->json(['message' => 'quote was successfully liked'], 200);
     }
 
