@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\UserQuoteUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCommentRequest;
 use App\Http\Requests\Admin\StoreOrDestroyLikeRequest;
@@ -11,6 +12,7 @@ use App\Models\Movie;
 use App\Models\Quote;
 use App\Models\QuoteComment;
 use App\Models\QuoteLike;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class QuoteController extends Controller
@@ -74,6 +76,7 @@ class QuoteController extends Controller
 
         if (count($quoteLike->get()) > 0) {
             $quoteLike->delete();
+            $this->quoteUpdated(Quote::findOrFail($quote->id), 'dislike', $request->userId);
             return response()->json(['message' => 'quote was successfully disliked'], 200);
         }
 
@@ -82,6 +85,7 @@ class QuoteController extends Controller
             'quote_id' => $quote->id,
         ]);
 
+       $this->quoteUpdated(Quote::findOrFail($quote->id), 'like', $request->userId);
         return response()->json(['message' => 'quote was successfully liked'], 200);
     }
 
@@ -94,9 +98,16 @@ class QuoteController extends Controller
             'thumbnail' => $request->thumbnail,
         ]);
 
+        $this->quoteUpdated(Quote::findOrFail($quote->id), 'comment', $quoteComment->id);
+
         return response()->json([
             'message' => 'comment was successfull',
             'quoteComment' => $quoteComment,
         ], 201);
+    }
+
+    public function quoteUpdated(Quote $quote, String $action, Int $id)
+    {
+        UserQuoteUpdated::dispatch($quote, $action, $id);
     }
 }

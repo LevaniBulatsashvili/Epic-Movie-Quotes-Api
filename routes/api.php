@@ -53,10 +53,6 @@ Route::controller(QuoteController::class)->middleware('jwt.auth')->group(functio
     Route::get('/quote/{quote}', 'getQuote')->name('one_quote');
 });
 
-Route::controller(QuoteController::class)->group(function () {
-    Route::get('/quotes/{quote}/quote-updated', 'quoteUpdated')->name('quote_updated');
-});
-
 Route::controller(AdminMovieController::class)->prefix('/admin')->middleware('jwt.auth')->group(function () {
     Route::post('/movies', 'store')->name('movies.store');
     Route::post('/movies/{movie}', 'update')->name('movies.update');
@@ -69,6 +65,7 @@ Route::controller(AdminQuoteController::class)->prefix('/admin')->middleware('jw
     Route::delete('/quotes/{quote}', 'destroy')->name('quotes.delete');
     Route::post('/quotes/{quote}/like', 'createOrDestroyLike')->name('quote_like');
     Route::post('/quotes/{quote}/comment', 'comment')->name('quote_comment');
+    Route::get('/quotes/{quote}/{action}/{id}/quote-updated', 'quoteUpdated')->name('quote_updated');
 });
 
 Route::post('/swagger-login', [SwaggerController::class, 'login'])->name('swagger_login');
