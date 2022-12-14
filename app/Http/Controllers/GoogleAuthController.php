@@ -28,16 +28,16 @@ class GoogleAuthController extends Controller
             $google_user = Socialite::driver('google')->stateless()->user();
             $user = User::where('email', $google_user->getEmail())->first();
 
-            if (!$user)
-            {
+            if (!$user) {
                 $user = User::create([
                     'username' => $google_user->getName(),
                     'email' => $google_user->getEmail(),
                     'google_id' => $google_user->getId(),
                 ]);
                 Auth::login($user);
+            } else {
+                Auth::login($user);
             }
-            else Auth::login($user);
 
             $payload = [
                 'exp' => Carbon::now()->addminutes(300)->timestamp,
@@ -47,7 +47,6 @@ class GoogleAuthController extends Controller
             $jwt = JWT::encode($payload, config('jwt.secret'), 'HS256');
             $cookie = cookie('access_token', $jwt, 300, '/', env('FRONTEND_URL'), true, true, false, 'Strict');
             return redirect(env('FULL_FRONTEND_URL'))->withCookie($cookie);
-
         } catch (\Throwable $th) {
             dd('Something went wrong!' . $th->getMessage());
         }
