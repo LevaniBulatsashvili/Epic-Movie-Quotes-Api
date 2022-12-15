@@ -39,7 +39,7 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(GoogleAuthController::class)->group(function () {
     Route::get('auth/google', 'redirect')->name('google_auth');
-    Route::get('auth/google/call-back', 'callbackGoogle')->name('logout');
+    Route::get('auth/google/call-back', 'callbackGoogle')->name('google_logout');
 });
 
 Route::controller(MovieController::class)->middleware('jwt.auth')->group(function () {

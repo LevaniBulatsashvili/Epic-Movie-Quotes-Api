@@ -107,6 +107,14 @@ php artisan config:cache
 
 in order to cache environment variables.
 
+sometimes .env file doesn't save properly, in that case run:
+
+```
+php artisan optimize:clear
+```
+
+to optimize the cache.
+
 5. We also need to create public storage link
 
 ```
