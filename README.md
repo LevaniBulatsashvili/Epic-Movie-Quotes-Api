@@ -2,7 +2,7 @@
 
 ---
 
-Before getting started checkout [Epic-Movie-Quotes](https://github.com/RedberryInternship/levan-bulatsashvili-epic-movie-quotes) for frontend implementation <br>
+Before getting started checkout [Epic-Movie-Quotes](https://github.com/LevaniBulatsashvili/Epic-Movie-Quotes) for frontend implementation <br>
 Epic Movie Quotes API App allows users to authenticate their accounts, create, get, update and even delete movies and their associated quotes. additionally users can comment, like and get notifications using our API
 
 ---
